@@ -24,7 +24,7 @@ Response time [ms]: p99 5 p99.9 19 p100 54
 Errors: total 0
 ---------------------- report end -------------------------------
 
-./bin/perf -c 100 -n 1000  -u http://www.google.com
+./bin/perf -c 100 -n 10  -u http://www.google.com
 
 ---------------------- report start -----------------------------
 requests:998
