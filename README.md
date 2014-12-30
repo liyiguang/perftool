@@ -41,7 +41,7 @@ Errors: total 2
 ```
 
 ### todo
-1. And redis client for redis client and server test
+1. Add redis client for redis client and server test
 
 ### extend
 write a subclass or com.yiguang.perf.Test
