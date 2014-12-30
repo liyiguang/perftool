@@ -1,0 +1,44 @@
+#!/bin/bash
+
+root=$(
+  cd $(dirname $(readlink -e $0 || echo $0))/..
+  /bin/pwd
+)
+
+if [ -z "$JAVA_HOME" ]
+then
+    echo "Please set environment JAVA_HOME";
+    exit 1
+fi
+
+DATE=$(date +%Y%m%d%H%M%S)
+JAVA=$JAVA_HOME/bin/java
+HEAP="-Xms1G -Xmx1G -XX:MaxPermSize=512M"
+HEAP="$HEAP -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$root/jvm-$DATE.hprof"
+
+GC="-XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=80"
+GC="$GC -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark"
+
+OPT="-server"
+
+MAINCLASS=com.yiguang.perf.LoadRunner
+
+function set_classpath()
+{
+    CLASSPATH=""
+    jars=$(find $root/lib -name *.jar)
+	for i in $jars
+	do
+		tmpclasspath=$i:$tmpclasspath
+	done
+	CLASSPATH=$CLASSPATH$tmpclasspath
+}
+
+set_classpath
+
+$JAVA $OPT $HEAP $GC -cp $CLASSPATH $MAINCLASS "$@"
+
+
+
+
+
